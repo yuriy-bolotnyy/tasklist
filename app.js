@@ -10,7 +10,19 @@ const taskInput = document.querySelector("input[type=text][name=task]")
 loadEventListeners();
 
 function loadEventListeners() {
+    // Listen for Submit 
     form.addEventListener('submit', addTask)
+    // Listen for Remove Task
+    taskList.addEventListener('click', removeTask)
+}
+
+// Remove Task
+function removeTask(e) {
+    const li = e.target.parentNode.parentNode
+    print(li)
+    li.remove()
+
+    e.preventDefault()
 }
 
 // Add Task
