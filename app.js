@@ -18,9 +18,11 @@ function loadEventListeners() {
 
 // Remove Task
 function removeTask(e) {
-    const li = e.target.parentNode.parentNode
-    print(li)
-    li.remove()
+    if (e.target.parentElement.classList.contains('delete-item')) {
+        const li = e.target.parentNode.parentNode
+        print(li)
+        li.remove()    
+    }
 
     e.preventDefault()
 }
