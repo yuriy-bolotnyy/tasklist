@@ -14,6 +14,21 @@ function loadEventListeners() {
     form.addEventListener('submit', addTask)
     // Listen for Remove Task
     taskList.addEventListener('click', removeTask)
+    // Clear all tasks event
+    clearBtn.addEventListener('click', clearTaskList)
+}
+
+// Clear Task List
+function clearTaskList(e) {
+    if (confirm('Are you sure, to delete all tasks?')) {
+        print("YES")
+        const allTasksLi = document.querySelectorAll(".collection li")
+        allTasksLi.forEach(task => {task.remove()})
+    } else {
+        print("Cancel")
+    }
+    
+    e.preventDefault()
 }
 
 // Remove Task
@@ -24,7 +39,6 @@ function removeTask(e) {
         if (confirm('Are you sure?')) {
             li.remove() 
         }
-           
     }
 
     e.preventDefault()
