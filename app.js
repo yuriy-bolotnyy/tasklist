@@ -16,6 +16,28 @@ function loadEventListeners() {
     taskList.addEventListener('click', removeTask)
     // Clear all tasks event
     clearBtn.addEventListener('click', clearTaskList)
+    // Filter tasks
+    filter.addEventListener('keyup', filterTasks)
+}
+
+// Filter Tasks
+function filterTasks(e) {
+    const text = e.target.value.toLowerCase();
+    print(text)
+
+    const allTasks = document.querySelectorAll(".collection li.collection-item")
+    allTasks.forEach(task => {
+        const taskText = task.textContent
+        if (taskText.toLowerCase().indexOf(text) != -1) {
+            print(`'${text}' found in ${task}`)
+            task.style.display = 'block'
+        } else {
+            print(`'${text}' NOT found in ${task}`)
+            task.style.display = 'none'
+        }
+    })
+    
+    e.preventDefault()
 }
 
 // Clear Task List
