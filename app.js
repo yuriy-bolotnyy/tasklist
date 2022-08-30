@@ -58,6 +58,9 @@ function clearTaskList(e) {
         print("YES")
         const allTasksLi = document.querySelectorAll(".collection li")
         allTasksLi.forEach(task => {task.remove()})
+        const allTasks = Array.from(allTasksLi).map(li => li.firstChild.textContent)
+        print(`Removing tasks [${allTasks}] from Local Storage`)
+        allTasks.forEach(task => removeTaskFromLocalStorage(task))
     } else {
         print("Cancel")
     }
@@ -76,8 +79,6 @@ function removeTask(e) {
             removeTaskFromLocalStorage(task)
         }
     }
-
-    
 
     e.preventDefault()
 }
