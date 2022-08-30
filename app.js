@@ -10,6 +10,8 @@ const taskInput = document.querySelector("input[type=text][name=task]")
 loadEventListeners();
 
 function loadEventListeners() {
+    // DOM load event
+    document.addEventListener('DOMContentLoaded', loadTasks);
     // Listen for Submit 
     form.addEventListener('submit', addTask)
     // Listen for Remove Task
@@ -18,6 +20,16 @@ function loadEventListeners() {
     clearBtn.addEventListener('click', clearTaskList)
     // Filter tasks
     filter.addEventListener('keyup', filterTasks)
+}
+
+// Load Tasks from local storage
+function loadTasks() {
+    tasks = tasksInLocalStorage()
+    // print(typeof tasks)
+    if (tasks) {
+        print(`Tasks in LocalStorage: ${tasks}`)
+        tasks.forEach(task => addTaskLi(task))
+    }
 }
 
 // Filter Tasks
@@ -59,11 +71,35 @@ function removeTask(e) {
         const li = e.target.parentNode.parentNode
         // print(li)
         if (confirm('Are you sure?')) {
+            task = li.firstChild.textContent
             li.remove() 
+            removeTaskFromLocalStorage(task)
         }
     }
 
+    
+
     e.preventDefault()
+}
+
+function addTaskLi(task) {
+       // Create li elemetnt
+       const li = document.createElement('li')
+       // Add class
+       li.className = 'collection-item';
+       // Create text node, append to li
+       li.appendChild(document.createTextNode(task))
+       // Create link 'x' for task deletion
+       const link = document.createElement('a');
+       link.className = 'delete-item secondary-content';
+       // Add icon html
+       link.innerHTML = '<i class="fa fa-remove"></i>'
+       // Append link to li
+       li.appendChild(link);
+       print(li)
+   
+       // Append li to ui
+       taskList.appendChild(li)
 }
 
 // Add Task
@@ -73,26 +109,42 @@ function addTask(e) {
         alert('Add a task');
     }
 
-    // Ceate li elemetnt
-    const li = document.createElement('li')
-    // Add class
-    li.className = 'collection-item';
-    // Create text node, append to li
-    li.appendChild(document.createTextNode(taskInput.value))
-    // Create link 'x' for task deletion
-    const link = document.createElement('a');
-    link.className = 'delete-item secondary-content';
-    // Add icon html
-    link.innerHTML = '<i class="fa fa-remove"></i>'
-    // Append link to li
-    li.appendChild(link);
-    print(li)
+    addTaskLi(taskInput.value)
 
-    // Append li to ui
-    taskList.appendChild(li)
+    // Store in local storage
+    storeInLocalStorage(taskInput.value);
 
     //Clear input
     taskInput.value = '';
 
     e.preventDefault();
+}
+
+function tasksInLocalStorage() {
+    let tasks = [];
+    localStorageTasks = localStorage.getItem('tasks');
+    if (localStorageTasks) {
+       tasks = JSON.parse(localStorageTasks);
+       print(`Local storage has tasks: ${tasks}`)
+    }
+    return tasks
+}
+
+function storeInLocalStorage(task) {
+     let tasks = tasksInLocalStorage();
+
+     tasks.push(task);
+     print(`Added ${task} to all tasks list => ${tasks}`)
+
+     localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function removeTaskFromLocalStorage(task) {
+    let tasks = tasksInLocalStorage();
+    if (tasks.includes(task)) {
+        tasks = tasks.filter(it => it != task);
+        print(`Removed task '${task}'`)
+    }
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    print(`Stored new tasks list: ${tasks}`)
 }
